@@ -10,7 +10,7 @@
 
 > [!NOTE]
 > **Version 2.0**  
-> **Get Sample：[sample](https://hub.keccak.top/2932796375github/NonGKI_Kernel_Build_2nd/blob/mainline/.github/workflows/build-kernel.yml))**  
+> **Get Sample：[sample](https://hub.keccak.top/2932796375github/NonGKI_Kernel_Build_2nd/blob/mainline/.github/workflows/build-sample.yml)**  
 
 ### Introduction
 
