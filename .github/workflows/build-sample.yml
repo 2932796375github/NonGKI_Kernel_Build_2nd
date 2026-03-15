@@ -1,0 +1,140 @@
+name: Build Sample YAML
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+env:
+  # 设备环境
+  DEVICE_NAME : "device_name" # 设备名称（例如：OnePlus 8T）
+  DEVICE_CODENAME : "device_codename" # 设备代号（例如：kebab）
+
+  CUSTOM_CMDS : "CLANG_TRIPLE=aarch64-linux-gnu-" # 自定义编译命令，用于设置交叉编译器目标
+  EXTRA_CMDS : "LD=ld.lld LLVM=1 LLVM_IAS=1" # 额外编译选项，LLVM 编译器相关配置
+
+  KERNEL_SOURCE : "https://github.com/kernel_author/android_kernel_codename.git" # 内核源码仓库地址
+  KERNEL_BRANCH : "system_os" # 内核源码分支名称
+
+  CLANG_SOURCE : "https://github.com/llvm/llvm-project/releases/download/llvmorg-19.1.7/LLVM-19.1.7-Linux-X64.tar.xz" # LLVM/Clang 编译器下载地址
+  CLANG_BRANCH : "" # Clang 分支（留空使用默认）
+
+  GCC_GNU : false # 是否使用 GNU GCC（设置为 true 时使用 64/32 位 GCC 源）
+  GCC_64_SOURCE : "https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9.git" # 64 位 GCC 源码
+  GCC_64_BRANCH : "android12L-release" # 64 位 GCC 分支
+  GCC_32_SOURCE : "https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9.git" # 32 位 GCC 源码
+  GCC_32_BRANCH : "android12L-release" # 32 位 GCC 分支
+
+  DEFCONFIG_SOURCE: "" # 自定义 defconfig 源文件路径（可选）
+  DEFCONFIG_NAME : "codename_defconfig" # 内核配置文件名称
+  DEFCONFIG_ORIGIN_IMAGE: "" # 从原厂镜像提取 defconfig（可选）
+  DEFCONFIG_FROM_BOOT: false # 是否从 boot.img 提取配置
+
+  KERNELSU_SOURCE : "" # KernelSU 源码仓库地址（留空使用自动获取）
+  KERNELSU_BRANCH : "" # KernelSU 分支名称
+
+  KERNELSU_AUTO_GET : "true" # 如果您想轻松设置 KernelSU，可以设为 true。
+  KERNELSU_AUTO_FORK : "rsuntk" # magic, rsuntk, next, resukisu 和 sukisu
+
+  SUSFS_ENABLE : false # 是否启用 SUSFS（文件系统隐藏功能）
+  SUSFS_FIXED : false # 是否使用固定的 SUSFS 补丁
+
+  AK3_SOURCE : "https://github.com/osm0sis/AnyKernel3.git" # AnyKernel3 打包工具源码地址
+  AK3_BRANCH : "master" # AnyKernel3 分支名称
+
+  BOOT_SOURCE : "" # 原厂 boot.img 镜像地址（可选）
+
+  NEED_DTBO : false # 是否需要编译 DTBO（设备树覆盖）
+  NEED_SAFE_DTBO : false # 是否需要编译安全 DTBO
+
+  ROM_TEXT : "rom_android" # ROM 类型文本（用于命名输出文件）
+
+  # 其他环境
+  PYTHON_VERSION: "3" # Python 版本，仅支持 2（Ubuntu 22.04 和 Ubuntu 20.04）或 3（任何操作系统版本）。
+
+  PACK_METHOD: "Anykernel3" # 打包方法：Anykernel3 需要 SOURCE 和 BRANCH，MKBOOTIMG 不需要。
+
+  KERNELSU_METHOD: "shell" # KernelSU 注入方法：shell（脚本注入）、manual（手动注入）或 only（仅集成不注入）。
+
+  PATCHES_SOURCE: "author/source" # 内核补丁源码：[您的名称]/[您的补丁] -> gooder123/NonGKI_Patcher
+  PATCHES_BRANCH: "branch" # 补丁分支：[您的分支] -> main
+
+  SUSFS_FOLDER_FIXED: "" # SUSFS 补丁前缀目录路径。如果没有则留空。 -> your_folder
+  SUSFS_PATCH_FIXED: "" # SUSFS 补丁文件名。如果有多个补丁，请用逗号分隔。如果没有则留空。 -> patch1,patch2
+
+  REKERNEL_ENABLE: "false" # 是否启用 Re:Kernel（内核重编译功能）。
+
+  HOOK_METHOD: "syscall" # Hook 方法选择：Manual hook method -> syscall。
+  HOOK_OLDER: "false" # 是否包含旧内核的回溯补丁和 syscall 旧补丁。
+
+  KERNEL_PATCH: "false" # 如果您的内核版本 <= 4.9，可以启用此选项来修补 kernel_write 和 kernel_read 函数。
+
+  KPM_ENABLE: "false" # 是否启用 KPM（内核补丁管理器），适用于所有设备。
+  KPM_INLINE: "false" # 是否使用 KPM Inline 模式（仅用于 SukiSU-Ultra）。
+  KPM_KPATCH_NEXT: "false" # 是否在构建步骤中 Hook KPatch-Next。
+  KPM_PATCH_SOURCE: "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU_patch/refs/heads/main/kpm/patch_linux" # 如果您想使用 KPM Inline，需要设置补丁可执行文件源 -> raw.githubusercontent.com/Test/Test/patch 。
+
+  BASEBAND_GUARD_ENABLE: "false" # 是否启用 Baseband Guard（防止对关键分区/设备节点的未授权写入）。
+  BASEBAND_GUARD_BOOT: "false" # 是否保护 boot 分区免受未授权写入。
+
+  HIDE_STUFF: "false" # 是否隐藏部分功能（如 Root 隐藏、Magisk 隐藏等）
+
+  GENERATE_DTB: "false" # 如果您的内核需要 DTB（设备树二进制）但无法自动生成，请启用此选项（仅适用于 Anykernel3）。
+  GENERATE_CHIP: "qcom" # SoC 芯片厂商：仅支持 qcom（高通）和 mediatek（联发科）。
+
+  BUILD_DEBUGGER: "false" # 是否启用构建调试器（输出详细的构建错误信息）。
+  SKIP_PATCH: "false" # 是否忽略补丁调试器中发现的错误（不建议在生产环境使用）。
+
+  BUILD_OTHER_CONFIG: "false" # 是否合并额外的内核配置文件。
+  MERGE_CONFIG_FILES: "vendor/debugfs.config,vendor/lahaina_QGKI.config" # 要合并的配置文件列表（用逗号分隔）
+
+  FREE_MORE_SPACE: "false" # 是否释放更多存储空间（清理不必要的文件以节省空间）。
+
+jobs:
+  build-kernel:
+    name: 构建内核
+    runs-on: ubuntu-latest # 运行环境：您可以更改为 ubuntu-22.04，并且需要设置容器为 ubuntu-latest
+    # container: archlinux/archlinux:latest # 容器环境：如果您需要使用 Arch Linux -> archlinux/archlinux:latest 或 Ubuntu 20.04 -> ubuntu:focal
+    env:
+      CCACHE_COMPILERCHECK: "%compiler% -dumpmachine; %compiler% -dumpversion" # ccache 编译器检查策略
+      CCACHE_NOHASHDIR: "true" # 禁用目录哈希（提高 ccache 命中率）
+      CCACHE_HARDLINK: "true" # 使用硬链接代替复制（节省空间）
+
+    steps:
+      - name: ⏰ 检出仓库
+        uses: actions/checkout@v4
+
+      - name: ⌛️ 编译环境准备
+        uses: ./.github/workflows/build-env
+
+      - name: ⚙️ 获取必要工具
+        uses: ./.github/workflows/build-ready
+
+      - name: 🪝 SUSFS 内核补丁
+        uses: ./.github/workflows/patch-susfs
+
+      - name: 🔗 no-kprobe 补丁
+        uses: ./.github/workflows/patch-no-kprobe
+
+      - name: 🪛 额外内核选项
+        run: |
+          # 仅 ${{ env.DEVICE_NAME }} 设备使用此步骤。
+          cd $GITHUB_WORKSPACE/device_kernel
+          # 在此处添加自定义内核配置或命令
+
+      - name: 🧰 Re:Kernel 内核补丁
+        uses: ./.github/workflows/patch-rekernel
+
+      - name: 🔒 Baseband Guard 内核补丁
+        uses: ./.github/workflows/patch-baseband-guard
+
+      - name: 🔧 隐藏功能补丁
+        uses: ./.github/workflows/patch-hide-stuff
+
+      - name: 🚀 构建过程
+        uses: ./.github/workflows/build-process
+
+      - name: 🔩 打包过程
+        uses: ./.github/workflows/pack-process
+
+      - name: ✏️ 上传构建产物
+        uses: ./.github/workflows/upload-files
