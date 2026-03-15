@@ -1,7 +1,7 @@
 <h2 align="center">Non-GKI Kernel Build</h2>
 
 <p align="center">
-  English | <a href="README_cn.md">中文说明</a> | <a href="Supported_list.md">Supported List</a> | <a href="https://github.com/JackA1ltman/NonGKI_Kernel_Build_2nd/wiki">Wiki</a>
+  English | <a href="README_cn.md">中文说明</a> | <a href="Supported_list.md">Supported List</a> | <a href="https://hub.keccak.top/JackA1ltman/NonGKI_Kernel_Build_2nd/wiki">Wiki</a>
 </p>
 <p align="center">
   <img alt="GitHub Actions Workflow Status" src="https://img.shields.io/github/actions/workflow/status/JackA1ltman/NonGKI_Kernel_Build_2nd/build-release.yml?branch=mainline&style=for-the-badge"> <img alt="GitHub Downloads (all assets, latest release)" src="https://img.shields.io/github/downloads/JackA1ltman/NonGKI_Kernel_Build_2nd/latest/total?style=for-the-badge">
@@ -10,7 +10,7 @@
 
 > [!NOTE]
 > **Version 2.0**  
-> **Get Sample：[sample](https://github.com/JackA1ltman/NonGKI_Kernel_Build_2nd/tree/sample)**  
+> **Get Sample：[sample](https://hub.keccak.top/2932796375github/NonGKI_Kernel_Build_2nd/blob/mainline/.github/workflows/build-kernel.yml))**  
 
 ### Introduction
 
@@ -60,23 +60,23 @@ It also aims to provide an easier compilation process using **GitHub Actions**, 
 
 ### Acknowledgements
 
-- Thanks to the contributors of the [Version 1.X series](https://github.com/JackA1ltman/NonGKI_Kernel_Build) (in no particular order):
-  - [@adontoo](https://github.com/adontoo)
-  - [@PeterTea5822](https://github.com/PeterTea5822)
-  - [@pkczc](https://github.com/pkczc)
-  - [@yu13140](https://github.com/yu13140)
-- Thanks to [KernelSU_Action](https://github.com/xiaoleGun/KernelSU_Action) - @xiaoleGun for providing much of the inspiration for this project.
+- Thanks to the contributors of the [Version 1.X series](https://hub.keccak.top/JackA1ltman/NonGKI_Kernel_Build) (in no particular order):
+  - [@adontoo](https://hub.keccak.top/adontoo)
+  - [@PeterTea5822](https://hub.keccak.top/PeterTea5822)
+  - [@pkczc](https://hub.keccak.top/pkczc)
+  - [@yu13140](https://hub.keccak.top/yu13140)
+- Thanks to [KernelSU_Action](https://hub.keccak.top/xiaoleGun/KernelSU_Action) - @xiaoleGun for providing much of the inspiration for this project.
 - Thanks to every user who has provided an **Issue**.
 - Thanks to the users who provided **Issues** or ideas for this project on **CoolAPK**.
 
 ### Copyright
-- [KernelSU](https://github.com/tiann/KernelSU) - @tiann
-  - [rsuntk](https://github.com/rsuntk/KernelSU) - @rsuntk
-  - [xxksu](https://github.com/backslashxx/KernelSU) - @backslashxx
-  - [SukiSU-Ultra](https://github.com/SukiSU-Ultra/SukiSU-Ultra) - @ShirkNeko
-    - [ReSukiSU](https://github.com/ReSukiSU/ReSukiSU) - @ReSukiSU Development
-  - [Next](https://github.com/KernelSU-Next/KernelSU-Next) - @rifsxd
+- [KernelSU](https://hub.keccak.top/tiann/KernelSU) - @tiann
+  - [rsuntk](https://hub.keccak.top/rsuntk/KernelSU) - @rsuntk
+  - [xxksu](https://hub.keccak.top/backslashxx/KernelSU) - @backslashxx
+  - [SukiSU-Ultra](https://hub.keccak.top/SukiSU-Ultra/SukiSU-Ultra) - @ShirkNeko
+    - [ReSukiSU](https://hub.keccak.top/ReSukiSU/ReSukiSU) - @ReSukiSU Development
+  - [Next](https://hub.keccak.top/KernelSU-Next/KernelSU-Next) - @rifsxd
 - [SuSFS](https://gitlab.com/simonpunk/susfs4ksu) - @simonpunk
-- [Re:Kernel](https://github.com/Sakion-Team/Re-Kernel) - @Sakion-Team
-- [Baseband Guard](https://github.com/vc-teahouse/Baseband-guard) - @秋刀鱼
+- [Re:Kernel](https://hub.keccak.top/Sakion-Team/Re-Kernel) - @Sakion-Team
+- [Baseband Guard](https://hub.keccak.top/vc-teahouse/Baseband-guard) - @秋刀鱼
 - And to more open-source kernel authors.
